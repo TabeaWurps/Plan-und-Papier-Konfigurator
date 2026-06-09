@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planungshilfen-Konfigurator v18.5 (Schrift auf den Linien)</title>
+    <title>Planungshilfen-Konfigurator v18.6 (Mobil-Optimiert)</title>
     <style>
         * {
             box-sizing: border-box;
@@ -24,7 +24,7 @@
             transition: background-image 0.3s ease;
         }
         
-        /* Sidebar Layout */
+        /* Sidebar Layout (Desktop) */
         .config-sidebar {
             width: 480px;
             background-color: #ffffff;
@@ -315,7 +315,7 @@
         }
         .btn-print:hover { background-color: #70675c; }
 
-        /* Preview Area Container */
+        /* Preview Area Container (Desktop) */
         .preview-container {
             margin-left: 480px;
             flex-grow: 1;
@@ -381,6 +381,7 @@
             padding: 55px 50px;
             overflow: hidden;
             margin-bottom: 20px;
+            transform-origin: top center; /* Wichtig für die Skalierung auf dem Handy */
         }
 
         /* Appendix design styling */
@@ -503,13 +504,13 @@
             gap: 4px; 
         }
 
-        /* BASIS-LINIE: Ausrichtung optimiert, damit Text auf der Linie aufsitzt */
+        /* BASIS-LINIE */
         .lesson-line {
             display: flex;
             align-items: flex-end;
             height: 26px;
             position: relative;
-            border-bottom: 1px dotted #b0a89f; /* Grundlinie für Folgezeilen */
+            border-bottom: 1px dotted #b0a89f;
         }
         .lesson-num {
             width: 25px;
@@ -522,15 +523,15 @@
             align-self: stretch;
         }
         
-        /* KOMBINIERTE ZEILE 1 (Fachname + Eingabefeld dahinter) */
+        /* KOMBINIERTE ZEILE 1 */
         .lesson-line-row1 {
             display: flex;
             align-items: flex-end;
             width: 100%;
-            padding-bottom: 1px; /* Senkt den Text leicht ab */
+            padding-bottom: 1px;
         }
         .lesson-line.has-combined-row {
-            border-bottom: 1px dotted #b0a89f; /* Überschreibt oder sichert die gepunktete Linie */
+            border-bottom: 1px dotted #b0a89f;
         }
         .lesson-static-text-inline {
             font-size: 16px;
@@ -543,7 +544,7 @@
             padding-bottom: 1px;
         }
 
-        /* BESCHREIBBARE LINIEN (Browser-Modus) */
+        /* BESCHREIBBARE LINIEN */
         .lesson-editable-input {
             flex-grow: 1;
             border: 1px dashed rgba(140, 130, 117, 0.25);
@@ -552,7 +553,7 @@
             font-size: 16px;
             color: #4a4540;
             padding-left: 8px;
-            padding-bottom: 1px; /* Senkt die Texteingabe ab */
+            padding-bottom: 1px;
             font-family: inherit;
             height: 23px;
             line-height: 1;
@@ -600,6 +601,64 @@
             display: inline-block;
         }
 
+        /* ==========================================================================
+           HANDY & TABLET ANPASSUNGEN (RESPONSIVE DESIGN)
+           ========================================================================== */
+        @media screen and (max-width: 1024px) {
+            body {
+                flex-direction: column; /* Stapelt Sidebar und Vorschau untereinander */
+                background-attachment: scroll;
+            }
+
+            /* Design-Switcher fixieren oder anpassen */
+            #design-switcher {
+                left: 0 !important;
+                position: relative !important;
+                width: 100% !important;
+                box-shadow: none !important;
+            }
+
+            /* Sidebar sitzt jetzt oben und füllt die Breite */
+            .config-sidebar {
+                position: relative !important;
+                width: 100% !important;
+                height: auto !important;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+                padding: 15px;
+            }
+
+            /* Vorschau-Bereich rückt nach unten nach */
+            .preview-container {
+                margin-left: 0 !important;
+                padding: 10px !important;
+                gap: 20px !important;
+                margin-top: 20px !important;
+                width: 100%;
+                overflow-x: hidden; /* Verhindert hässliches seitliches Ruckeln */
+            }
+
+            /* MAGIE: Skaliert die starre A4-Seite so herunter, dass sie aufs Handy-Display passt */
+            .a4-page {
+                zoom: 0.45; /* Für ältere Browser */
+                transform: scale(0.45); /* Für moderne Handys */
+                margin-bottom: -580px; /* Gleicht den leeren Raum aus, den das "scale" hinterlässt */
+            }
+            
+            /* Für sehr kleine Handys noch etwas kleiner skalieren */
+            @media (max-width: 480px) {
+                .a4-page {
+                    zoom: 0.42;
+                    transform: scale(0.42);
+                    margin-bottom: -620px;
+                }
+            }
+
+            .week-bundle-separator, .appendix-separator {
+                max-width: 90%;
+                margin: 15px auto;
+            }
+        }
+
         /* DRUCK-ANPASSUNGEN */
         @media print {
             body {
@@ -626,9 +685,10 @@
                 height: 1123px !important;
                 page-break-after: always !important;
                 margin-bottom: 0 !important;
+                transform: scale(1) !important; /* Beim Drucken wieder volle Größe */
+                zoom: 1 !important;
             }
             
-            /* KÄSTCHENRÄNDER BEIM DRUCKEN ENTFERNEN */
             .lesson-editable-input {
                 border: none !important;
                 border-radius: 0 !important;
@@ -729,7 +789,6 @@
 
     <script>
         const days = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"];
-        
         let manualLineOverrides = {};
 
         const HOLIDAY_DATABASE_2026 = {
