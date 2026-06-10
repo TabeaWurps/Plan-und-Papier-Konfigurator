@@ -672,69 +672,48 @@
 
         /* DRUCK-ANPASSUNGEN */
         @media print {
-            body {
-                background-color: #ffffff;
-                background-image: none !important;
-                display: block;
-            }
-            #design-switcher, .config-sidebar, .week-bundle-separator, .appendix-separator {
-                display: none !important;
-            }
-            .preview-container {
-                margin-left: 0 !important;
-                padding: 0 !important;
-                gap: 0 !important;
-                margin-top: 0 !important;
-            }
-            .a4-page {
+            body { background-color: #ffffff !important; background-image: none !important; display: block !important; }
+            #design-switcher, .config-sidebar, .week-bundle-separator, .appendix-separator { display: none !important; }
+            .preview-container { margin-left: 0 !important; padding: 0 !important; gap: 0 !important; margin-top: 0 !important; }
+            .a4-page { box-shadow: none !important; width: 794px !important; height: 1123px !important; page-break-after: always !important; margin-bottom: 0 !important; transform: scale(1) !important; zoom: 1 !important; background-color: transparent !important; }
+            
+            /* 1. Eingabefelder: Rahmen komplett weg, damit sie keine eigene Linie zeichnen */
+            .lesson-editable-input, .wichtig-line {
+                background: transparent !important;
+                border: none !important;        /* WICHTIG: Das entfernt die Linie des Eingabefeldes */
                 box-shadow: none !important;
-                width: 794px !important; 
-                height: 1123px !important;
-                page-break-after: always !important;
-                margin-bottom: 0 !important;
-                transform: scale(1) !important;
-                zoom: 1 !important;
-                background-color: transparent !important;
+                outline: none !important;
+                padding-left: 2mm !important;
+            }
+
+            /* 2. Boxen-Container: Auch hier alles entfernen */
+            .wichtig-box-content-only, .stunde-input-group, .subject-card {
+                border: none !important;
+                background: transparent !important;
+                box-shadow: none !important;
+            }
+
+            /* 3. Feiertags-Zeilen neutralisieren */
+            .day-row.is-holiday-day { 
+                background: transparent !important; 
+                border-bottom: 1px dotted #8c8275 !important; 
+                padding: 0 0 15px 0 !important; 
             }
             
-            /* Alle Hintergründe & Rahmen von Textfeldern komplett unsichtbar machen */
-            .lesson-editable-input,
-            .wichtig-line {
-                background: transparent !important;
-                border: none !important;
-                padding-top: 2mm !important;
-                padding-left: 2mm !important;
-                box-shadow: none !important;
+            /* 4. Tabellen im Anhang */
+            .master-plan-table th, .master-plan-table td { 
+                border: none !important; 
+                border-bottom: 1px dotted #8c8275 !important; 
+                background: transparent !important; 
             }
 
-            /* Das Wichtig-Kästchen als Container verliert auch seinen gestrichelten Rand */
-            .wichtig-box-content-only {
-                border: none !important;
-                background: transparent !important;
+            /* 5. Die einzige Linie, die bleiben darf: die von lesson-line */
+            .lesson-line { 
+                border: none !important; 
+                border-bottom: 1px dotted #8c8275 !important; 
             }
-
-            /* Feiertags-Zeilen verlieren den rötlichen Hintergrund */
-            .day-row.is-holiday-day {
-                background: transparent !important;
-                border-bottom: 2px solid rgba(230, 223, 213, 0.7) !important;
-                padding: 0 0 15px 0 !important;
-            }
-
-            /* Tabelle im Anhang säubern (keine Grautöne für gerade Zeilen / Header) */
-            .master-plan-table th {
-                background: transparent !important;
-            }
-            .master-plan-table tr:nth-child(even) {
-                background: transparent !important;
-            }
-
-            .lesson-line {
-                border-bottom: 1px dotted #b0a89f !important;
-            }
-            @page {
-                size: A4 portrait;
-                margin: 0;
-            }
+            
+            @page { size: A4 portrait; margin: 0; }
         }
     </style>
 </head>
@@ -798,7 +777,7 @@
 
         <div class="reset-zone-header">
             <div class="section-title no-margin">Einheitsplanung</div>
-            <button class="btn-reset-form" onclick="resetThematicPlan()">❌ Reihe leeren</button>
+            <button class="btn-reset-form" onclick="resetThematicPlan()">❌ Inhalt löschen</button>
         </div>
         
         <div id="subjectsContainer"></div>
@@ -1361,7 +1340,7 @@
                 let headerTr = document.createElement('tr');
                 headerTr.innerHTML = `
                     <th style="width: 25%;">Fach</th>
-                    <th>Chronologische Stundenübersicht der Reihe</th>
+                    <th>Chronologische Stundenübersicht Einheit</th>
                 `;
                 thead.appendChild(headerTr);
                 table.appendChild(thead);
