@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planungshilfen-Konfigurator v18.6 (Mobil-Optimiert)</title>
+    <title>Planungshilfen-Konfigurator v19.9</title>
     <style>
         * {
             box-sizing: border-box;
@@ -381,7 +381,7 @@
             padding: 55px 50px;
             overflow: hidden;
             margin-bottom: 20px;
-            transform-origin: top center; /* Wichtig für die Skalierung auf dem Handy */
+            transform-origin: top center;
         }
 
         /* Appendix design styling */
@@ -457,11 +457,32 @@
             padding-left: 5px;
         }
         
+        /* Das interaktive Kästchen in der Ecke */
         .wichtig-box-content-only {
-            width: 250px;
-            margin-top: -4px; 
+            width: 260px;
+            margin-top: -33px; 
             margin-left: 38px; 
-            padding: 10px 5px;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            border: 1px dashed rgba(140, 130, 117, 0.2);
+            border-radius: 4px;
+        }
+        .wichtig-line {
+            width: 100%;
+            border: none;
+            border-bottom: 1px dashed rgba(140, 130, 117, 0.2); 
+            background: rgba(253, 250, 244, 0.4);
+            font-size: 14px;
+            color: #4a4540;
+            padding: 2px 4px;
+            font-family: inherit;
+        }
+        .wichtig-line:focus {
+            outline: none;
+            background: rgba(253, 250, 244, 0.8);
+            border-bottom: 1px solid #8c8275;
         }
 
         /* Schedule Layout */
@@ -471,7 +492,7 @@
             display: flex;
             flex-direction: column;
             gap: 25px; 
-            margin-top: 15px;
+            margin-top: 34px;
         }
         
         .page-2-spacer { height: 120px; }
@@ -519,7 +540,7 @@
             color: #a3998e;
             display: flex;
             align-items: flex-end;
-            padding-bottom: 1px;
+            padding-bottom: 2px;
             align-self: stretch;
         }
         
@@ -528,7 +549,7 @@
             display: flex;
             align-items: flex-end;
             width: 100%;
-            padding-bottom: 1px;
+            padding-bottom: 0px;
         }
         .lesson-line.has-combined-row {
             border-bottom: 1px dotted #b0a89f;
@@ -540,8 +561,8 @@
             font-weight: normal;
             white-space: nowrap;
             margin-right: 8px;
-            line-height: 1;
-            padding-bottom: 1px;
+            line-height: 1.2;
+            padding-bottom: 2px;
         }
 
         /* BESCHREIBBARE LINIEN */
@@ -553,10 +574,12 @@
             font-size: 16px;
             color: #4a4540;
             padding-left: 8px;
-            padding-bottom: 1px;
+            padding-bottom: 2px; 
             font-family: inherit;
-            height: 23px;
-            line-height: 1;
+            height: 24px;
+            line-height: 1.2;
+            display: flex;
+            align-items: flex-end;
         }
         .lesson-editable-input:focus {
             outline: none;
@@ -601,24 +624,19 @@
             display: inline-block;
         }
 
-        /* ==========================================================================
-           HANDY & TABLET ANPASSUNGEN (RESPONSIVE DESIGN)
-           ========================================================================== */
+        /* HANDY & TABLET ANPASSUNGEN */
         @media screen and (max-width: 1024px) {
             body {
-                flex-direction: column; /* Stapelt Sidebar und Vorschau untereinander */
+                flex-direction: column;
                 background-attachment: scroll;
             }
-
-            /* Design-Switcher fixieren oder anpassen */
             #design-switcher {
                 left: 0 !important;
                 position: relative !important;
                 width: 100% !important;
                 box-shadow: none !important;
+                display: none !important;
             }
-
-            /* Sidebar sitzt jetzt oben und füllt die Breite */
             .config-sidebar {
                 position: relative !important;
                 width: 100% !important;
@@ -626,25 +644,19 @@
                 box-shadow: 0 4px 10px rgba(0,0,0,0.05);
                 padding: 15px;
             }
-
-            /* Vorschau-Bereich rückt nach unten nach */
             .preview-container {
                 margin-left: 0 !important;
                 padding: 10px !important;
                 gap: 20px !important;
                 margin-top: 20px !important;
                 width: 100%;
-                overflow-x: hidden; /* Verhindert hässliches seitliches Ruckeln */
+                overflow-x: hidden;
             }
-
-            /* MAGIE: Skaliert die starre A4-Seite so herunter, dass sie aufs Handy-Display passt */
             .a4-page {
-                zoom: 0.45; /* Für ältere Browser */
-                transform: scale(0.45); /* Für moderne Handys */
-                margin-bottom: -580px; /* Gleicht den leeren Raum aus, den das "scale" hinterlässt */
+                zoom: 0.45;
+                transform: scale(0.45);
+                margin-bottom: -580px;
             }
-            
-            /* Für sehr kleine Handys noch etwas kleiner skalieren */
             @media (max-width: 480px) {
                 .a4-page {
                     zoom: 0.42;
@@ -652,7 +664,6 @@
                     margin-bottom: -620px;
                 }
             }
-
             .week-bundle-separator, .appendix-separator {
                 max-width: 90%;
                 margin: 15px auto;
@@ -669,10 +680,6 @@
             #design-switcher, .config-sidebar, .week-bundle-separator, .appendix-separator {
                 display: none !important;
             }
-            .day-row.is-holiday-day {
-                background-color: #fafafa !important;
-                border: 1px dashed #ccc !important;
-            }
             .preview-container {
                 margin-left: 0 !important;
                 padding: 0 !important;
@@ -685,26 +692,45 @@
                 height: 1123px !important;
                 page-break-after: always !important;
                 margin-bottom: 0 !important;
-                transform: scale(1) !important; /* Beim Drucken wieder volle Größe */
+                transform: scale(1) !important;
                 zoom: 1 !important;
+                background-color: transparent !important;
             }
             
-            .lesson-editable-input {
-                border: none !important;
-                border-radius: 0 !important;
+            /* Alle Hintergründe & Rahmen von Textfeldern komplett unsichtbar machen */
+            .lesson-editable-input,
+            .wichtig-line {
                 background: transparent !important;
-                display: inline-block !important;
-                color: #000000 !important;
-                padding-left: 4px !important;
-                padding-bottom: 0px !important;
-                height: auto !important;
-                line-height: 1 !important;
+                border: none !important;
+                padding-top: 2mm !important;
+                padding-left: 2mm !important;
+                box-shadow: none !important;
+            }
+
+            /* Das Wichtig-Kästchen als Container verliert auch seinen gestrichelten Rand */
+            .wichtig-box-content-only {
+                border: none !important;
+                background: transparent !important;
+            }
+
+            /* Feiertags-Zeilen verlieren den rötlichen Hintergrund */
+            .day-row.is-holiday-day {
+                background: transparent !important;
+                border-bottom: 2px solid rgba(230, 223, 213, 0.7) !important;
+                padding: 0 0 15px 0 !important;
+            }
+
+            /* Tabelle im Anhang säubern (keine Grautöne für gerade Zeilen / Header) */
+            .master-plan-table th {
+                background: transparent !important;
+            }
+            .master-plan-table tr:nth-child(even) {
+                background: transparent !important;
             }
 
             .lesson-line {
                 border-bottom: 1px dotted #b0a89f !important;
             }
-            
             @page {
                 size: A4 portrait;
                 margin: 0;
@@ -761,14 +787,13 @@
                 <input type="date" id="startDate" onchange="updatePreview()">
             </div>
             
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 5px;">
                 <label for="weekCount">Wie viele Wochen drucken?</label>
                 <input type="number" id="weekCount" value="6" min="1" max="24" oninput="updatePreview()">
             </div>
         </div>
 
         <div class="section-title"> Basis-Stundenplan</div>
-
         <div id="daysFormContainer"></div>
 
         <div class="reset-zone-header">
@@ -777,7 +802,6 @@
         </div>
         
         <div id="subjectsContainer"></div>
-        
         <button class="btn-add-subject" onclick="addNewSubjectCard()">+ Weiteres Fach hinzufügen</button>
         
         <div style="border-top: 2px solid #f4f1ea; margin-top: 200px; padding-top: 5px;">
@@ -790,6 +814,7 @@
     <script>
         const days = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"];
         let manualLineOverrides = {};
+        let importantBoxOverrides = {}; 
 
         const HOLIDAY_DATABASE_2026 = {
             "ALL": [
@@ -942,23 +967,6 @@
             "Freitag": ["Deutsch", "Musik", "Klassenrat", "Mittag", "", ""]
         };
 
-        let preloadedSubjects = [
-            {
-                name: "Sachunterricht",
-                topics: [
-                    "Milchgebiss & bleibende Zähne", "Der Aufbau eines Zähne",
-                    "Zahngesunde vs. zahnkranke Ernährung", "Die richtige Zahnputztechnik (KAI)"
-                ]
-            },
-            {
-                name: "Deutsch",
-                topics: [
-                    "Schreibschrift: Buchstabe Mm", "Leseübungen zu Silbenbögen",
-                    "Gedichtwerkstatt: Frühlingsreime"
-                ]
-            }
-        ];
-
         let currentBgA = '3a.jpg';
         let currentBgB = '3b.jpg';
 
@@ -1040,6 +1048,7 @@
             updatePreview();
         }
 
+        // Automatische Linien-Erkennung
         function guessLinesCount(subjectName) {
             if (!subjectName) return 1;
             const name = subjectName.toLowerCase();
@@ -1111,6 +1120,13 @@
 
         let globalSubjectCounters = {};
 
+        function saveWichtigOverride(weekIdx, lineIdx, value) {
+            let key = `${weekIdx}-${lineIdx}`;
+            importantBoxOverrides[key] = value;
+            let el = document.getElementById(`wichtig-el-${key}`);
+            if (el) el.setAttribute('value', value);
+        }
+
         function createDayDomElement(day, dayDateObj, weekIndex) {
             let holidayName = getHolidayNameForDay(dayDateObj);
             let isHoliday = (holidayName !== null);
@@ -1170,7 +1186,7 @@
                                         <input type="text" class="lesson-editable-input" 
                                                id="input-el-${overrideKey}"
                                                value="${currentText}" 
-                                               placeholder="Notiz..." 
+                                               placeholder="" 
                                                oninput="saveLineOverride('${overrideKey}', this.value)">
                                     </div>
                                 `;
@@ -1273,13 +1289,19 @@
                 page1.className = 'a4-page';
                 page1.style.backgroundImage = `url('${currentBgA}')`;
                 
+                let wTxt0 = importantBoxOverrides[`${w}-0`] || "";
+                let wTxt1 = importantBoxOverrides[`${w}-1`] || "";
+
                 let header = document.createElement('div');
                 header.className = 'header-section';
                 header.innerHTML = `
                     <div class="date-container-box">
                         <div class="date-display">${calculatedDateStr}</div>
                     </div>
-                    <div class="wichtig-box-content-only"></div>
+                    <div class="wichtig-box-content-only">
+                        <input type="text" class="wichtig-line" id="wichtig-el-${w}-0" value="${wTxt0}" placeholder="" oninput="saveWichtigOverride(${w}, 0, this.value)">
+                        <input type="text" class="wichtig-line" id="wichtig-el-${w}-1" value="${wTxt1}" placeholder="" oninput="saveWichtigOverride(${w}, 1, this.value)">
+                    </div>
                 `;
                 page1.appendChild(header);
                 
@@ -1395,6 +1417,7 @@
             updatePreview();
         }
 
+        // ... exportPlanAsFile, triggerFileImport, resetThematicPlan, importPlanFromFile bleiben unverändert ...
         function exportPlanAsFile() {
             let planData = {
                 startDate: document.getElementById('startDate').value,
@@ -1402,7 +1425,8 @@
                 selectedState: document.getElementById('stateSelect').value,
                 timetable: {},
                 subjects: [],
-                manualLineOverrides: manualLineOverrides
+                manualLineOverrides: manualLineOverrides,
+                importantBoxOverrides: importantBoxOverrides
             };
 
             days.forEach(day => {
@@ -1439,6 +1463,12 @@
             document.getElementById('fileImportInput').click();
         }
 
+        function resetThematicPlan() {
+            let cards = document.querySelectorAll('.subject-card');
+            cards.forEach(card => card.remove());
+            updatePreview();
+        }
+
         function importPlanFromFile(event) {
             let file = event.target.files[0];
             if (!file) return;
@@ -1446,54 +1476,49 @@
             let reader = new FileReader();
             reader.onload = function(e) {
                 try {
-                    let planData = JSON.parse(e.target.result);
+                    let data = JSON.parse(e.target.result);
                     
-                    document.getElementById('startDate').value = planData.startDate || "";
-                    document.getElementById('weekCount').value = planData.weekCount || "6";
-                    if(planData.selectedState) document.getElementById('stateSelect').value = planData.selectedState;
-                    if(planData.manualLineOverrides) manualLineOverrides = planData.manualLineOverrides;
+                    if(data.startDate) document.getElementById('startDate').value = data.startDate;
+                    if(data.weekCount) document.getElementById('weekCount').value = data.weekCount;
+                    if(data.selectedState) document.getElementById('stateSelect').value = data.selectedState;
+                    
+                    if(data.manualLineOverrides) manualLineOverrides = data.manualLineOverrides;
+                    if(data.importantBoxOverrides) importantBoxOverrides = data.importantBoxOverrides;
 
-                    days.forEach(day => {
-                        if(planData.timetable && planData.timetable[day]) {
-                            for(let i = 1; i <= 6; i++) {
-                                let cellData = planData.timetable[day][i-1];
-                                if(cellData) {
-                                    document.getElementById(`input-${day}-${i}`).value = cellData.val;
-                                    document.getElementById(`lines-${day}-${i}`).value = cellData.lines;
+                    if(data.timetable) {
+                        days.forEach(day => {
+                            if(data.timetable[day]) {
+                                for(let i = 1; i <= 6; i++) {
+                                    let entry = data.timetable[day][i-1];
+                                    if(entry) {
+                                        document.getElementById(`input-${day}-${i}`).value = entry.val;
+                                        document.getElementById(`lines-${day}-${i}`).value = entry.lines;
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
+                    }
 
-                    document.getElementById('subjectsContainer').innerHTML = '';
-                    if(planData.subjects && planData.subjects.length > 0) {
-                        planData.subjects.forEach(sub => {
-                            addNewSubjectCard(sub.name, sub.topics);
+                    let container = document.getElementById('subjectsContainer');
+                    container.innerHTML = '';
+                    if(data.subjects && Array.isArray(data.subjects)) {
+                        data.subjects.forEach(s => {
+                            addNewSubjectCard(s.name, s.topics);
                         });
                     }
 
                     updatePreview();
-                    alert("📂 Planung erfolgreich geladen!");
                 } catch (err) {
-                    alert("Fehler beim Lesen der Datei.");
+                    alert("Fehler beim Laden der Datei. Ungültiges Format.");
                 }
             };
             reader.readAsText(file);
-            event.target.value = '';
         }
 
-        function resetThematicPlan() {
-            if(confirm("Möchtest du alle eingetragenen Fächer und Themenreihen wirklich löschen? Dein Basis-Stundenplan oben bleibt komplett erhalten!")) {
-                document.getElementById('subjectsContainer').innerHTML = '';
-                manualLineOverrides = {};
-                updatePreview();
-            }
-        }
-
-        setInitialMonday();
-        preloadedSubjects.forEach(sub => {
-            addNewSubjectCard(sub.name, sub.topics);
-        });
+        window.onload = function() {
+            setInitialMonday();
+            updatePreview();
+        };
     </script>
 </body>
 </html>
